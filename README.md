@@ -3,16 +3,16 @@
 
 Usage:
 在你将要使用选择器的ViewController中，
+```Objective-C
+# import “CityPickerView.h”
 ```
-`# import “CityPickerView.h”
-```
-`
-```
-`self.picker = [\[CityPickerView alloc]()init];
-self.picker.confirmBlock = ^(NSString *province,NSString *city,NSString *area){
-NSLog(@"%@,%@,%@",province,city,area);
+
+```Objective-C
+self.picker = [\[CityPickerView alloc]()init];
+  self.picker.confirmBlock = ^(NSString *province,NSString *city,NSString *area){
+  NSLog(@"%@,%@,%@",province,city,area);
 [wself.yourBnt setTitle:\[NSString stringWithFormat:@"%@	%@	%@  ",province,city,area]() forState:UIControlStateNormal];
 };
 [self.view addSubview:self.picker]();
-````
+```
 
