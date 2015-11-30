@@ -15,5 +15,5 @@ typedef void(^ConfirmBlock)(NSString *province,NSString *city,NSString *area);
 @property (nonatomic,copy)ConfirmBlock confirmBlock;
 
 - (void)popupPickerView;
-
+- (void)closePickerView;
 @end

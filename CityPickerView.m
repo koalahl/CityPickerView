@@ -109,18 +109,10 @@
 //选择省份时
 - (void)reloadCityDataWithProvinceId:(NSNumber *)proId{
     [self.tempCityArray removeAllObjects];
-    
+    self.cityStr = @"";
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"ProID = %@",proId];
     
     self.tempCityArray =[NSMutableArray arrayWithArray:[self.cityArray filteredArrayUsingPredicate:predicate]];
-    
-//    for (NSDictionary *dic  in self.cityArray) {
-//        if ([dic[@"ProID"] isEqualToNumber:proId]) {
-//            NSLog(@"省级ID：%@  %@",proId , dic[@"name"]);
-//
-//            [self.tempCityArray addObject:dic];
-//        }
-//    }
     
     [self.picker reloadComponent:1];
     //重选省份时，自动滚动到第一个城市
@@ -128,27 +120,23 @@
     //当只选择了省份时，也要改变第一个城市包含的区县；并且重设cityStr和areaStr
     [self reloadAreaDataWithCityId:self.tempCityArray[0][@"CityID"]];
     self.cityStr = self.tempCityArray[0][@"name"];
-    self.areaStr = self.tempAreaArray[0][@"DisName"];
+    if (self.tempAreaArray.count) {
+        self.areaStr = self.tempAreaArray[0][@"DisName"];
+    }
 }
 //选择城市时
 - (void)reloadAreaDataWithCityId:(NSNumber *)cityId{
     [self.tempAreaArray removeAllObjects];
-    
+    self.areaStr = @"";
     NSPredicate * predicate = [NSPredicate predicateWithFormat:@"CityID = %@",cityId];
     self.tempAreaArray = [NSMutableArray arrayWithArray:[self.areaArray filteredArrayUsingPredicate:predicate]];
-//    for (NSDictionary *dic  in self.areaArray) {
-//
-//        if ([dic[@"CityID"] isEqualToNumber:cityId]) {
-//            NSLog(@"城市ID：%@  %@",cityId , dic[@"DisName"]);
-//
-//            [self.tempAreaArray addObject:dic];
-//        }
-//    }
-    
+
     [self.picker reloadComponent:2];
     //重选城市时，自动滚动到第一个区县
     [self.picker selectRow:0 inComponent:2 animated:YES];
-
+    if (self.tempAreaArray.count) {
+        self.areaStr = self.tempAreaArray[0][@"DisName"];
+    }
 }
 #pragma mark - UIPickerViewDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
@@ -196,7 +184,7 @@
     
     switch (component) {
         case 0:{
-            NSLog(@"%@",self.provinceArray[row][@"name"]);
+            NSLog(@"当前选择省级：%@",self.provinceArray[row][@"name"]);
             _provinceStr = _provinceArray[row][@"name"];
             [self reloadCityDataWithProvinceId:_provinceArray[row][@"ProID"]];
             break;}
@@ -207,7 +195,6 @@
             break;}
         case 2:
             _areaStr = [self pickerView:pickerView titleForRow:row forComponent:component];
-            //_areaStr = self.tempAreaArray[row][@"DisName"];
             NSLog(@"当前选择区县:%@",_areaStr);
 
             break;
